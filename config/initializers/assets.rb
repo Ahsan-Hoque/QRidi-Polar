@@ -12,12 +12,9 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
-OAUTH2C_CLIENT = OAuth2c::Client.new(
-    authz_url:     "https://flow.polar.com/oauth2/authorization",
-    token_url:     "https://polarremote.com/v2/oauth2/token",
-    client_id:     "6ce77c5f-35ba-4c31-8caa-db4f266d3aa7",
-    # client_id:     "fa1b23a7-55a2-4c28-b053-7c407b49e38e",
-    client_secret: "f30f68e7-802f-4bb9-95f4-2cc66edfcf14",
-    # client_secret: "84b86ea4-f375-4f3b-8ec8-3acb6dcf20f1",
-    redirect_uri:  "http://127.0.0.1:3000/"
-    )
+# OAUTH2C_CLIENT = OAuth2::Client.new(
+#     authz_url:     "https://flow.polar.com/oauth2/authorization",
+#     client_id:     "6ce77c5f-35ba-4c31-8caa-db4f266d3aa7",
+#     client_secret: "f30f68e7-802f-4bb9-95f4-2cc66edfcf14",
+#     redirect_uri:  "http://127.0.0.1:3000/"
+#     )
