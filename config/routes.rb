@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   root "users#index"
   resources :users do
     collection do
-      get 'index'
+      get 'requestSender'
+      get 'polarFlowCallBack'
     end
   end
 end
