@@ -1,24 +1,42 @@
-require 'oauth2'
 class UsersController < ApplicationController
 
   def index
-    client_id = "fa1b23a7-55a2-4c28-b053-7c407b49e38e"
-    client_secret = "84b86ea4-f375-4f3b-8ec8-3acb6dcf20f1"
-    authorize_url = "https://flow.polar.com/oauth2/authorization"
-    token_url = "https://polarremote.com/v2/oauth2/token"
-    access_link_url = "https://www.polaraccesslink.com/v3"
+    # raise params.inspect
+  end
 
-    # grant = OAUTH2C_CLIENT.authorization_code.authorization_path(redirect_uri:redirect_uri)
-    # puts grant.authz_url
-    # response.headers['custom-header'] = response_based_on_application
-    #
-    #
-    @client  = OAuth2::Client.new('https://flow.polar.com/oauth2/authorization','fa1b23a7-55a2-4c28-b053-7c407b49e38e','84b86ea4-f375-4f3b-8ec8-3acb6dcf20f1'    )
-    # @client  = OAuth2Client::Client.new('https://example.com', 's6BhdRkqt3', '4hJZY88TCBB9q8IpkeualA2lZsUhOSclkkSKw3RXuE')
+  def requestSender
+    redirect_to ENV['POLAR_AUTHORIZATION_END_POINT'] + ENV['POLAR_CLIENT_ID']
+  end
 
-    x = @client.authorization_code.authorization_path(:redirect_uri => 'http://localhost:3000/oauth2/')
+  def polarFlowCallBack
+    raise params.inspect
+  end
 
-    redirect_to x
+  def oauth2_callback
+    authorized_code =  params[:code]
+    puts authorized_code
+    authorization = 'Basic ' + Base64.encode64((ENV['POLAR_CLIENT_ID']+':'+ ENV['POLAR_CLIENT_SECRET']).to_s).gsub("\n", "")
+    puts authorization
+    content_type = "application/x-www-form-urlencoded"
+    accept = "application/json;charset=UTF-8"
+
+
+    response = HTTParty.post(
+        ENV['POLAR_TOKEN_END_POINT'],
+        :headers => {
+            'Authorization'     =>authorization,
+            "Content-Type"      => content_type,
+            "Accept"            => accept
+        },
+        :data=>{
+            "grant_type"        => "authorization_code",
+            "code"              => authorized_code,
+            "redirect_uri"      => "http://localhost:5000/oauth2_callback"
+    }
+    )
+
+    raise response.inspect
 
   end
+
 end
