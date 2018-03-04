@@ -25,17 +25,37 @@ class UsersController < ApplicationController
         ENV['POLAR_TOKEN_END_POINT'],
         :headers => {
             'Authorization'     =>authorization,
-            "Content-Type"      => content_type,
-            "Accept"            => accept
+            'Content-Type'      => content_type,
+            'Accept'            => accept
         },
-        :data=>{
-            "grant_type"        => "authorization_code",
-            "code"              => authorized_code,
-            "redirect_uri"      => "http://localhost:5000/oauth2_callback"
+        :body => {
+            'grant_type'        => "authorization_code",
+            'code'              => authorized_code
     }
     )
 
-    raise response.inspect
+    access_token = response.parsed_response['access_token'].to_s
+    token_type = response.parsed_response['token_type']
+    expires_in = response.parsed_response['expires_in']
+    x_user_id = response.parsed_response['x_user_id'].to_s
+
+
+
+
+    result = HTTParty.post("https://www.polaraccesslink.com/v3/users",
+                          :headers=>{
+                              'Authorization'     =>access_token,
+                              'Content-Type' => 'application/xml',
+                              'Accept' => 'application/json'},
+                          :body =>{"member-id"=> "id_#{x_user_id}"}
+
+                           )
+
+    raise result.inspect
+
+
+
+
 
   end
 
